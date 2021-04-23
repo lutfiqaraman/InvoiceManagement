@@ -1,14 +1,10 @@
-﻿using InvoiceManagementApp.Infrastructure.Data;
+﻿using InvoiceManagementApp.Application.Common.Interfaces;
+using InvoiceManagementApp.Infrastructure.Data;
 using InvoiceManagementApp.Infrastructure.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace InvoiceManagementApp.Infrastructure
 {
@@ -19,6 +15,9 @@ namespace InvoiceManagementApp.Infrastructure
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     configuration.GetConnectionString("DefaultConnection")));
+
+            services
+                .AddScoped<IApplicationDbContext>(provider => provider.GetService<ApplicationDbContext>());
 
             services.AddDatabaseDeveloperPageExceptionFilter();
 
