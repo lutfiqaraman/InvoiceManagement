@@ -13,7 +13,8 @@ namespace InvoiceManagementApp.API.Services
         public string UserId { get; }
         public CurrentUserService(IHttpContextAccessor httpContextAccessor)
         {
-            this.UserId = httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+            this.UserId = 
+                httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
         }
     }
 }
