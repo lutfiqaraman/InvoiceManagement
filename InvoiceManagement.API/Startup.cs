@@ -1,3 +1,5 @@
+using InvoiceManagementApp.API.Services;
+using InvoiceManagementApp.Application.Common.Interfaces;
 using InvoiceManagementApp.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -21,6 +23,9 @@ namespace InvoiceManagement.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.ConfigureInfrastructureServices(Configuration);
+            
+            services.AddScoped<ICurrentUserService, CurrentUserService>();
+
             services.AddControllersWithViews();
             services.AddRazorPages();
 
