@@ -1,4 +1,5 @@
 using InvoiceManagementApp.API.Services;
+using InvoiceManagementApp.Application;
 using InvoiceManagementApp.Application.Common.Interfaces;
 using InvoiceManagementApp.Infrastructure;
 using Microsoft.AspNetCore.Builder;
@@ -22,6 +23,7 @@ namespace InvoiceManagement.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddApplication();
             services.ConfigureInfrastructureServices(Configuration);
             
             services.AddScoped<ICurrentUserService, CurrentUserService>();
