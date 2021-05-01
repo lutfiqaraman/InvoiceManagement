@@ -14,7 +14,7 @@ namespace InvoiceManagementApp.Application.Invoices.ViewModels
             this.InvoiceItems = new List<InvoiceItemViewModel>();
         }
 
-        public long Id { get; set; }
+        public int Id { get; set; }
         public string InvoiceNumber { get; set; }
         public string From { get; set; }
         public string To { get; set; }

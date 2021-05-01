@@ -8,7 +8,7 @@ namespace InvoiceManagementApp.Application.Invoices.ViewModels
 {
     public class InvoiceItemViewModel
     {
-        public long Id { get; set; }
+        public int Id { get; set; }
         public string Item { get; set; }
         public double Qty { get; set; }
         public double Rate { get; set; }
