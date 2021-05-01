@@ -45,7 +45,7 @@ namespace InvoiceManagementApp.Infrastructure.Data
                 }
             }
 
-            return SaveChangesAsync(cancellationToken);
+            return base.SaveChangesAsync(cancellationToken);
         }
     }
 }
