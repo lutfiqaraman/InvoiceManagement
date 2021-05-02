@@ -31,13 +31,13 @@ namespace InvoiceManagementApp.Application.Invoices.Handlers
             List<InvoiceViewModel> viewmodel = 
                 invoices.Select(i => new InvoiceViewModel
                 {
+                    Id = i.Id,
                     AmountPaid = i.AmountPaid,
                     Date = i.Date,
                     Discount = i.Discount,
                     DiscountType = i.DiscountType,
                     DueDate = i.DueDate,
                     From = i.From,
-                    Id = i.Id,
                     InvoiceNumber = i.InvoiceNumber,
                     PaymentTerms = i.PaymentTerms,
                     Tax = i.Tax,
