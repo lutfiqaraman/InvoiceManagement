@@ -1,4 +1,5 @@
-﻿using InvoiceManagementApp.Application.Common.Interfaces;
+﻿using AutoMapper;
+using InvoiceManagementApp.Application.Common.Interfaces;
 using InvoiceManagementApp.Application.Invoices.Commands;
 using InvoiceManagementApp.Domain.Entities;
 using MediatR;
@@ -12,38 +13,21 @@ namespace InvoiceManagementApp.Application.Invoices.Handlers
     public class CreateInvoiceCommandHandler : IRequestHandler<CreateInvoiceCommand, int>
     {
         private readonly IApplicationDbContext Context;
-        public CreateInvoiceCommandHandler(IApplicationDbContext context)
+        private readonly IMapper Mapper;
+        public CreateInvoiceCommandHandler(IApplicationDbContext context, IMapper mapper)
         {
             Context = context;
+            Mapper = mapper;
         }
 
         public async Task<int> Handle(CreateInvoiceCommand request, CancellationToken cancellationToken)
         {
-            var entity = new Invoice
-            {
-                AmountPaid = request.AmountPaid,
-                Date = request.Date,
-                DueDate = request.DueDate,
-                Discount = request.Discount,
-                DiscountType = request.DiscountType,
-                From = request.From,
-                InvoiceNumber = request.InvoiceNumber,
-                PaymentTerms = request.PaymentTerms,
-                Tax = request.Tax,
-                TaxType = request.TaxType,
-                To = request.To,
-                InvoiceItems = request.InvoiceItems.Select(i => new InvoiceItem
-                {
-                    Item = i.Item,
-                    Qty  = i.Qty,
-                    Rate = i.Rate
-                }).ToList()
-            };
+            Invoice invoiceEntity = Mapper.Map<Invoice>(request);
 
-            Context.Invoices.Add(entity);
+            Context.Invoices.Add(invoiceEntity);
             await Context.SaveChangesAsync(cancellationToken);
 
-            return entity.Id;
+            return invoiceEntity.Id;
         }
     }
 }
