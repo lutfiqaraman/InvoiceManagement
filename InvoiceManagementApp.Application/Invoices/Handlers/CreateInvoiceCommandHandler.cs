@@ -14,10 +14,11 @@ namespace InvoiceManagementApp.Application.Invoices.Handlers
     {
         private readonly IApplicationDbContext Context;
         private readonly IMapper Mapper;
+
         public CreateInvoiceCommandHandler(IApplicationDbContext context, IMapper mapper)
         {
             Context = context;
-            Mapper = mapper;
+            Mapper  = mapper;
         }
 
         public async Task<int> Handle(CreateInvoiceCommand request, CancellationToken cancellationToken)
