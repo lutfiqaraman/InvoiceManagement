@@ -5,6 +5,7 @@ namespace InvoiceManagementApp.Application.Invoices.Validators
 {
     public class CreateInvoiceCommandValidator : AbstractValidator<CreateInvoiceCommand>
     {
+        [System.Obsolete]
         public CreateInvoiceCommandValidator()
         {
             RuleFor(v => v.AmountPaid).NotNull();
