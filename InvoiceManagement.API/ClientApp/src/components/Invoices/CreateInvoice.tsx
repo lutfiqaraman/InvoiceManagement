@@ -23,6 +23,9 @@ const CreateInvoice : React.FC<ICreateInvoice> = ({ }) => {
                             <FormGroup>
                                 <Input type="text" placeholder="Invoice No." />
                             </FormGroup>
+                            <FormGroup>
+                                <Input type="date" placeholder="Invoice Date" />
+                            </FormGroup>
                         </Col>
                     </Row>
                 </CardBody>
