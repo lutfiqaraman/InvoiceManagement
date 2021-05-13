@@ -11,12 +11,17 @@ const CreateInvoice : React.FC<ICreateInvoice> = ({ }) => {
             <Card>
                 <CardBody>
                     <Row>
-                        <Col>
+                        <Col md={6}>
                             <FormGroup>
                                 <Input type="text" placeholder="From whom" />
                             </FormGroup>
                             <FormGroup>
                                 <Input type="text" placeholder="To whom" />
+                            </FormGroup>
+                        </Col>
+                        <Col md={6}>
+                            <FormGroup>
+                                <Input type="text" placeholder="Invoice No." />
                             </FormGroup>
                         </Col>
                     </Row>
