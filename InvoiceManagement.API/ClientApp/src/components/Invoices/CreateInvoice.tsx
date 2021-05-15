@@ -9,7 +9,8 @@ interface ICreateInvoice {
 }
 
 const CreateInvoice : React.FC<ICreateInvoice> = ({ }) => {
-    const [selectedDateFocus, setSelectedDateFocus] = useState(false);
+
+    const [selectedDateFocus, setSelectedDateFocus]       = useState(false);
     const [selectedDueDateFocus, setSelectedDueDateFocus] = useState(false);
 
     return (
@@ -27,8 +28,8 @@ const CreateInvoice : React.FC<ICreateInvoice> = ({ }) => {
                             <FormGroup>
                                 <Input type='text' placeholder='Payment terms' />
                             </FormGroup>
-
                         </Col>
+
                         <Col md={6}>
                             <FormGroup>
                                 <Input type='text' placeholder='To whom' />
