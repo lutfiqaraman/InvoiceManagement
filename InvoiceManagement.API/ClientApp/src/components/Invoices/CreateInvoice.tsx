@@ -1,5 +1,4 @@
 import React, { useState }  from 'react';
-import moment from 'moment';
 import { Card, CardBody, Row, Col, Input, FormGroup, Label } from 'reactstrap';
 import { SingleDatePicker } from 'react-dates';
 import 'react-dates/initialize';
@@ -20,16 +19,40 @@ const CreateInvoice : React.FC<ICreateInvoice> = ({ }) => {
                     <Row>
                         <Col md={6}>
                             <FormGroup>
-                                <Input type="text" placeholder="From whom" />
+                                <Input type='text' placeholder='From whom' />
                             </FormGroup>
                             <FormGroup>
-                                <Input type="text" placeholder="Invoice No." />
+                                <Input type='text' placeholder='Invoice No.' />
+                            </FormGroup>
+                            <FormGroup>
+                                <Input type='text' placeholder='Payment terms' />
+                            </FormGroup>
+
+                        </Col>
+                        <Col md={6}>
+                            <FormGroup>
+                                <Input type='text' placeholder='To whom' />
                             </FormGroup>
                             <FormGroup>
                                 <SingleDatePicker
-                                    placeholder="Due Date"
+                                    placeholder='Invoice Date'
                                     isOutsideRange={() => false}
-                                    id="due-date-picker"
+                                    id='invoice-date-picker'
+                                    small={true}
+                                    block={true}
+                                    numberOfMonths={1}
+                                    date={null}
+                                    onDateChange={() => {}}
+                                    focused={selectedDateFocus}
+                                    onFocusChange={({ focused }) => setSelectedDateFocus(focused)}
+                                    hideKeyboardShortcutsPanel={true}
+                                />
+                            </FormGroup>
+                            <FormGroup>
+                                <SingleDatePicker
+                                    placeholder='Due Date'
+                                    isOutsideRange={() => false}
+                                    id='due-date-picker'
                                     small={true}
                                     block={true}
                                     numberOfMonths={1}
@@ -39,17 +62,6 @@ const CreateInvoice : React.FC<ICreateInvoice> = ({ }) => {
                                     onFocusChange={({ focused }) => setSelectedDueDateFocus(focused)}
                                     hideKeyboardShortcutsPanel={true}
                                 />
-                            </FormGroup>
-                        </Col>
-                        <Col md={6}>
-                            <FormGroup>
-                                <Input type="text" placeholder="To whom" />
-                            </FormGroup>
-                            <FormGroup>
-                                <Input type="date" placeholder="Invoice Date" />
-                            </FormGroup>
-                            <FormGroup>
-                                <Input type="text" placeholder="Payment terms" />
                             </FormGroup>
                             <FormGroup>
                                 <Label>Balance: </Label>
