@@ -1,6 +1,8 @@
-import React, { useState }  from 'react';
-import { Card, CardBody, Row, Col, Input, FormGroup, Label } from 'reactstrap';
+import React, { useState } from 'react';
+import { Card, CardBody, Col, FormGroup, Input, Label, Row } from 'reactstrap';
 import { SingleDatePicker } from 'react-dates';
+import { CreateInvoiceCommand, DiscountType, InvoiceItemViewModel } from "../../utils/api";
+import moment from 'moment';
 import 'react-dates/initialize';
 import 'react-dates/lib/css/_datepicker.css';
 
@@ -13,6 +15,26 @@ const CreateInvoice : React.FC<ICreateInvoice> = ({ }) => {
     const [selectedDateFocus, setSelectedDateFocus]       = useState(false);
     const [selectedDueDateFocus, setSelectedDueDateFocus] = useState(false);
 
+    const initValue = new CreateInvoiceCommand({
+        invoiceNumber: '',
+        from: '',
+        to: '',
+        date: undefined,
+        paymentTerms: '',
+        dueDate: undefined,
+        discount: undefined,
+        discountType: DiscountType.Percentage,
+        amountPaid: undefined,
+        invoiceItems: [new InvoiceItemViewModel({
+            id: 0,
+            item: '',
+            qty: undefined,
+            rate: undefined,
+            amount: 0
+        })]
+    });
+    const [invoiceData, setInvoiceDate] = useState<CreateInvoiceCommand>(initValue);
+
     return (
         <div className="col-md-12">
             <Card>
@@ -20,19 +42,35 @@ const CreateInvoice : React.FC<ICreateInvoice> = ({ }) => {
                     <Row>
                         <Col md={6}>
                             <FormGroup>
-                                <Input type='text' placeholder='From whom' />
+                                <Input
+                                    type='text'
+                                    placeholder='From whom'
+                                    value={invoiceData.from}
+                                    onChange={(evt: any) => setInvoiceDate(new CreateInvoiceCommand({...invoiceData, from: evt.target.value}))}/>
                             </FormGroup>
                             <FormGroup>
-                                <Input type='text' placeholder='Invoice No.' />
+                                <Input
+                                    type='text'
+                                    placeholder='Invoice No.'
+                                    value={invoiceData.invoiceNumber}
+                                    onChange={(evt: any) => setInvoiceDate(new CreateInvoiceCommand({...invoiceData, invoiceNumber: evt.target.value}))}/>
                             </FormGroup>
                             <FormGroup>
-                                <Input type='text' placeholder='Payment terms' />
+                                <Input
+                                    type='text'
+                                    placeholder='Payment terms'
+                                    value={invoiceData.paymentTerms}
+                                    onChange={(evt: any) => setInvoiceDate(new CreateInvoiceCommand({...invoiceData, paymentTerms: evt.target.value}))}/>
                             </FormGroup>
                         </Col>
 
                         <Col md={6}>
                             <FormGroup>
-                                <Input type='text' placeholder='To whom' />
+                                <Input
+                                    type='text'
+                                    placeholder='To whom'
+                                    value={invoiceData.to}
+                                    onChange={(evt: any) => setInvoiceDate(new CreateInvoiceCommand({...invoiceData, to: evt.target.value}))}/>
                             </FormGroup>
                             <FormGroup>
                                 <SingleDatePicker
@@ -42,8 +80,8 @@ const CreateInvoice : React.FC<ICreateInvoice> = ({ }) => {
                                     small={true}
                                     block={true}
                                     numberOfMonths={1}
-                                    date={null}
-                                    onDateChange={() => {}}
+                                    date={invoiceData.date ? moment(invoiceData.date) : null}
+                                    onDateChange={(date) => {setInvoiceDate(new CreateInvoiceCommand({...invoiceData, date: date ? date.toDate() : undefined}))}}
                                     focused={selectedDateFocus}
                                     onFocusChange={({ focused }) => setSelectedDateFocus(focused)}
                                     hideKeyboardShortcutsPanel={true}
@@ -57,16 +95,16 @@ const CreateInvoice : React.FC<ICreateInvoice> = ({ }) => {
                                     small={true}
                                     block={true}
                                     numberOfMonths={1}
-                                    date={null}
-                                    onDateChange={() => {}}
+                                    date={invoiceData.dueDate ? moment(invoiceData.dueDate) : null}
+                                    onDateChange={(date) => {setInvoiceDate(new CreateInvoiceCommand({...invoiceData, dueDate: date ? date.toDate() : undefined}))}}
                                     focused={selectedDueDateFocus}
                                     onFocusChange={({ focused }) => setSelectedDueDateFocus(focused)}
                                     hideKeyboardShortcutsPanel={true}
                                 />
                             </FormGroup>
                             <FormGroup>
-                                <Label>Balance: </Label>
-                                <Label>8000</Label>
+                                <Label md={4} style={{ fontWeight: 'bold' }}>Balance</Label>
+                                <Label md={8} style={{ fontWeight: 'bold' }}>1000</Label>
                             </FormGroup>
                         </Col>
                     </Row>
