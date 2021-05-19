@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card, CardBody, Col, FormGroup, Input, Label, Row, Table, Button } from 'reactstrap';
+import { Card, CardBody, Col, FormGroup, Input, Label, Row, Table, Button, CardFooter } from 'reactstrap';
 import { SingleDatePicker } from 'react-dates';
 import { CreateInvoiceCommand, DiscountType, InvoiceItemViewModel, TaxType } from '../../utils/api';
 import { getTotal, getSubtotal, getBalance } from '../../utils/invoiceUtils';
@@ -249,6 +249,12 @@ const CreateInvoice : React.FC<ICreateInvoice> = ({ }) => {
                         </Col>
                     </Row>
                 </CardBody>
+                <CardFooter>
+                    <Button
+                        className="btn btn-primary"
+                        onClick={() => {}}
+                    >Save</Button>
+                </CardFooter>
             </Card>
         </div>
     );
