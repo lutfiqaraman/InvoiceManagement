@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card, CardBody, Col, FormGroup, Input, Label, Row } from 'reactstrap';
+import { Card, CardBody, Col, FormGroup, Input, Label, Row, Table, Button } from 'reactstrap';
 import { SingleDatePicker } from 'react-dates';
 import { CreateInvoiceCommand, DiscountType, InvoiceItemViewModel } from "../../utils/api";
 import moment from 'moment';
@@ -33,7 +33,31 @@ const CreateInvoice : React.FC<ICreateInvoice> = ({ }) => {
             amount: 0
         })]
     });
-    const [invoiceData, setInvoiceDate] = useState<CreateInvoiceCommand>(initValue);
+    const [invoiceData, setInvoiceData] = useState<CreateInvoiceCommand>(initValue);
+
+    const updateInvoiceItem = (property: 'item' | 'qty' | 'rate', index: number, value: any) => {
+        if (invoiceData && invoiceData.invoiceItems) {
+            const items = [...invoiceData.invoiceItems];
+            items[index][property] = value;
+            setInvoiceData(new CreateInvoiceCommand({ ...invoiceData, invoiceItems: [...items] }));
+        }
+    }
+
+    const addInvoiceItem = () => {
+        if (invoiceData && invoiceData.invoiceItems) {
+            const items = [...invoiceData.invoiceItems];
+            items.push(new InvoiceItemViewModel({ id: 0, item: '', qty: undefined, rate: undefined, amount: 0 }));
+            setInvoiceData(new CreateInvoiceCommand({ ...invoiceData, invoiceItems: [...items] }));
+        }
+    }
+
+    const removeItem = (index:number) => {
+        if (invoiceData && invoiceData.invoiceItems) {
+            const items = [...invoiceData.invoiceItems];
+            items.splice(index, 1);
+            setInvoiceData(new CreateInvoiceCommand({ ...invoiceData, invoiceItems: [...items] }));
+        }
+    }
 
     return (
         <div className="col-md-12">
@@ -46,21 +70,21 @@ const CreateInvoice : React.FC<ICreateInvoice> = ({ }) => {
                                     type='text'
                                     placeholder='From whom'
                                     value={invoiceData.from}
-                                    onChange={(evt: any) => setInvoiceDate(new CreateInvoiceCommand({...invoiceData, from: evt.target.value}))}/>
+                                    onChange={(evt: any) => setInvoiceData(new CreateInvoiceCommand({...invoiceData, from: evt.target.value}))}/>
                             </FormGroup>
                             <FormGroup>
                                 <Input
                                     type='text'
                                     placeholder='Invoice No.'
                                     value={invoiceData.invoiceNumber}
-                                    onChange={(evt: any) => setInvoiceDate(new CreateInvoiceCommand({...invoiceData, invoiceNumber: evt.target.value}))}/>
+                                    onChange={(evt: any) => setInvoiceData(new CreateInvoiceCommand({...invoiceData, invoiceNumber: evt.target.value}))}/>
                             </FormGroup>
                             <FormGroup>
                                 <Input
                                     type='text'
                                     placeholder='Payment terms'
                                     value={invoiceData.paymentTerms}
-                                    onChange={(evt: any) => setInvoiceDate(new CreateInvoiceCommand({...invoiceData, paymentTerms: evt.target.value}))}/>
+                                    onChange={(evt: any) => setInvoiceData(new CreateInvoiceCommand({...invoiceData, paymentTerms: evt.target.value}))}/>
                             </FormGroup>
                         </Col>
 
@@ -70,7 +94,7 @@ const CreateInvoice : React.FC<ICreateInvoice> = ({ }) => {
                                     type='text'
                                     placeholder='To whom'
                                     value={invoiceData.to}
-                                    onChange={(evt: any) => setInvoiceDate(new CreateInvoiceCommand({...invoiceData, to: evt.target.value}))}/>
+                                    onChange={(evt: any) => setInvoiceData(new CreateInvoiceCommand({...invoiceData, to: evt.target.value}))}/>
                             </FormGroup>
                             <FormGroup>
                                 <SingleDatePicker
@@ -81,7 +105,7 @@ const CreateInvoice : React.FC<ICreateInvoice> = ({ }) => {
                                     block={true}
                                     numberOfMonths={1}
                                     date={invoiceData.date ? moment(invoiceData.date) : null}
-                                    onDateChange={(date) => {setInvoiceDate(new CreateInvoiceCommand({...invoiceData, date: date ? date.toDate() : undefined}))}}
+                                    onDateChange={(date) => {setInvoiceData(new CreateInvoiceCommand({...invoiceData, date: date ? date.toDate() : undefined}))}}
                                     focused={selectedDateFocus}
                                     onFocusChange={({ focused }) => setSelectedDateFocus(focused)}
                                     hideKeyboardShortcutsPanel={true}
@@ -96,7 +120,7 @@ const CreateInvoice : React.FC<ICreateInvoice> = ({ }) => {
                                     block={true}
                                     numberOfMonths={1}
                                     date={invoiceData.dueDate ? moment(invoiceData.dueDate) : null}
-                                    onDateChange={(date) => {setInvoiceDate(new CreateInvoiceCommand({...invoiceData, dueDate: date ? date.toDate() : undefined}))}}
+                                    onDateChange={(date) => {setInvoiceData(new CreateInvoiceCommand({...invoiceData, dueDate: date ? date.toDate() : undefined}))}}
                                     focused={selectedDueDateFocus}
                                     onFocusChange={({ focused }) => setSelectedDueDateFocus(focused)}
                                     hideKeyboardShortcutsPanel={true}
@@ -106,6 +130,57 @@ const CreateInvoice : React.FC<ICreateInvoice> = ({ }) => {
                                 <Label md={4} style={{ fontWeight: 'bold' }}>Balance</Label>
                                 <Label md={8} style={{ fontWeight: 'bold' }}>1000</Label>
                             </FormGroup>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col md={12}>
+                            <Table striped>
+                                <thead>
+                                    <tr>
+                                        <th style={{width: '60%'}}>Item</th>
+                                        <th>Qty</th>
+                                        <th>Rate</th>
+                                        <th>Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {invoiceData.invoiceItems && invoiceData.invoiceItems.map((invoiceItem: InvoiceItemViewModel, index: number) =>
+                                    <tr key={`item-${index}`}>
+                                        <td>
+                                            <Input
+                                                type="text"
+                                                placeholder="Item description"
+                                                value={invoiceItem.item}
+                                                onChange={(evt: any) => updateInvoiceItem('item', index, evt.target.value)}
+                                            />
+                                        </td>
+                                        <td>
+                                            <Input
+                                                type="number"
+                                                placeholder="0"
+                                                value={invoiceItem.qty || ''}
+                                                onChange={(evt: any) => updateInvoiceItem('qty', index, evt.target.value ? parseInt(evt.target.value) : undefined)}
+                                            />
+                                        </td>
+                                        <td>
+                                            <Input
+                                                type="number"
+                                                placeholder="0"
+                                                value={invoiceItem.rate || ''}
+                                                onChange={(evt: any) => updateInvoiceItem('rate', index, evt.target.value ? parseInt(evt.target.value) : undefined)}
+                                            />
+                                        </td>
+                                        <td>
+                                            {invoiceItem.qty && invoiceItem.rate && invoiceItem.qty * invoiceItem.rate}
+                                        </td>
+                                        <td><Button color="danger" onClick={() => removeItem(index)}>X</Button></td>
+                                    </tr>
+                                )}
+                                </tbody>
+                            </Table>
+                            <Button className="btn btn-primary" onClick={() => addInvoiceItem()}>
+                                Add Item
+                            </Button>
                         </Col>
                     </Row>
                 </CardBody>
