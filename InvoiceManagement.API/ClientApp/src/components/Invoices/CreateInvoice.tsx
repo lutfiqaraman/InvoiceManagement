@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Card, CardBody, Col, FormGroup, Input, Label, Row, Table, Button } from 'reactstrap';
 import { SingleDatePicker } from 'react-dates';
-import { CreateInvoiceCommand, DiscountType, InvoiceItemViewModel } from "../../utils/api";
+import { CreateInvoiceCommand, DiscountType, InvoiceItemViewModel, TaxType } from '../../utils/api';
+import { getTotal, getSubtotal, getBalance } from '../../utils/invoiceUtils';
 import moment from 'moment';
 import 'react-dates/initialize';
 import 'react-dates/lib/css/_datepicker.css';
@@ -128,7 +129,7 @@ const CreateInvoice : React.FC<ICreateInvoice> = ({ }) => {
                             </FormGroup>
                             <FormGroup>
                                 <Label md={4} style={{ fontWeight: 'bold' }}>Balance</Label>
-                                <Label md={8} style={{ fontWeight: 'bold' }}>1000</Label>
+                                <Label md={8} style={{ fontWeight: 'bold' }}>{getBalance(invoiceData)}</Label>
                             </FormGroup>
                         </Col>
                     </Row>
@@ -181,6 +182,70 @@ const CreateInvoice : React.FC<ICreateInvoice> = ({ }) => {
                             <Button className="btn btn-primary" onClick={() => addInvoiceItem()}>
                                 Add Item
                             </Button>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col md={6}></Col>
+                        <Col md={6}>
+                            <FormGroup row>
+                                <Label md={4}>Subtotal</Label>
+                                <Col md={8}>
+                                    {getSubtotal(invoiceData.invoiceItems)}
+                                </Col>
+                            </FormGroup>
+                            <FormGroup row>
+                                <Label md={4}>Discount</Label>
+                                <Col md={4}>
+                                    <Input
+                                        type="number"
+                                        placeholder="0"
+                                        value={invoiceData.discount || ''}
+                                        onChange={(evt: any) => setInvoiceData(new CreateInvoiceCommand({ ...invoiceData, discount: evt.target.value ? parseInt(evt.target.value) : undefined }))} />
+                                </Col>
+                                <Col md={4}>
+                                    <Input
+                                        type="select"
+                                        value={invoiceData.discountType}
+                                        onChange={(evt: any) => setInvoiceData(new CreateInvoiceCommand({ ...invoiceData, discountType: evt.target.value }))}>
+                                        <option value={DiscountType.Flat}>Flat rate</option>
+                                        <option value={DiscountType.Percentage}>Percentage</option>
+                                    </Input>
+                                </Col>
+                            </FormGroup>
+                            <FormGroup row>
+                                <Label md={4}>Tax</Label>
+                                <Col md={4}>
+                                    <Input
+                                        type="number"
+                                        placeholder="0"
+                                        value={invoiceData.tax || ''}
+                                        onChange={(evt: any) => setInvoiceData(new CreateInvoiceCommand({ ...invoiceData, tax: evt.target.value ? parseInt(evt.target.value) : undefined }))} />
+                                </Col>
+                                <Col md={4}>
+                                    <Input
+                                        type="select"
+                                        value={invoiceData.taxType}
+                                        onChange={(evt: any) => setInvoiceData(new CreateInvoiceCommand({ ...invoiceData, taxType: evt.target.value }))}>
+                                        <option value={TaxType.Flat}>Flat rate</option>
+                                        <option value={TaxType.Percentage}>Percentage</option>
+                                    </Input>
+                                </Col>
+                            </FormGroup>
+                            <FormGroup row>
+                                <Label md={4}>Total</Label>
+                                <Col md={8}>
+                                    {getTotal(invoiceData)}
+                                </Col>
+                            </FormGroup>
+                            <FormGroup row>
+                                <Label md={4}>Amount Paid</Label>
+                                <Col md={8}>
+                                    <Input type="number"
+                                           placeholder="0"
+                                           value={invoiceData.amountPaid || ''}
+                                           onChange={(evt: any) => setInvoiceData(new CreateInvoiceCommand({ ...invoiceData, amountPaid: evt.target.value ? parseInt(evt.target.value) : undefined }))} />
+                                </Col>
+                            </FormGroup>
                         </Col>
                     </Row>
                 </CardBody>
